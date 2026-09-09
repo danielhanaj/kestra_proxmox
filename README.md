@@ -19,13 +19,7 @@ against the official `checksums_sha256.txt`).
 
 ```sh
 # on the Proxmox VE host
-bash kestra.sh
-```
-
-or, once hosted anywhere you like (gist, plain web server, repo):
-
-```sh
-bash -c "$(wget -qLO - https://example.com/kestra.sh)"
+var_os='debian' bash -c "$(curl -fsSL https://raw.githubusercontent.com/danielhanaj/kestra_proxmox/refs/heads/main/kestra.sh)"
 ```
 
 Choose Default or Advanced, wait for the build, then open
