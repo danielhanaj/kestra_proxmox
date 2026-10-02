@@ -22,6 +22,12 @@ against the official `checksums_sha256.txt`).
 var_os='debian' bash -c "$(curl -fsSL https://raw.githubusercontent.com/danielhanaj/kestra_proxmox/refs/heads/main/kestra.sh)"
 ```
 
+or, once hosted anywhere you like (gist, plain web server, repo):
+
+```sh
+bash -c "$(wget -qLO - https://example.com/kestra.sh)"
+```
+
 Choose Default or Advanced, wait for the build, then open
 `http://<lxc-ip>:8080` — the Kestra editor starts empty; create your first
 workflow in the UI.
@@ -52,18 +58,18 @@ service.
   **Update** (re-download + verify + replace + restart).
 - Helpers used from the engine: `update_os`, `motd_ssh`, `customize`,
   `cleanup_lxc`, `msg_*`. No Docker anywhere — this aligns with the
-  community-scripts policy *"We do NOT use Docker for our installation scripts."*
+  community-scripts policy _"We do NOT use Docker for our installation scripts."_
 
 ## Native stack
 
-| Component | Choice | Why |
-| --------- | ------ | --- |
-| OS        | Debian 13 (trixie) | unprivileged LXC friendly; ships all needed packages |
-| Kestra    | latest version from `api.kestra.io/v1/versions/latest` | official single source of truth for the version (fallback `2.0.0`) |
-| Launcher  | `kestra-<version>` from official GitHub releases | public, checksum-verified (vs. the signed `api/v1/versions/download` redirect); it's a shebang-less batch/sh polyglot, so the unit runs it via `/bin/sh` (running it via `execve` directly gives `Exec format error` / 203-EXEC) |
-| JVM       | `openjdk-25-jre-headless` | the 2.x launcher passes `--sun-misc-unsafe-memory-access=allow`, which only JDK ≥23 accepts |
-| DB        | embedded H2 (`server local`) | zero-config standalone; acceptable for a single-node LXC |
-| Service   | `kestra.service` (systemd, user `kestra`) | auto-start, restart-on-failure, no Docker |
+| Component | Choice                                                 | Why                                                                                                                                                                                                                              |
+| --------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| OS        | Debian 13 (trixie)                                     | unprivileged LXC friendly; ships all needed packages                                                                                                                                                                             |
+| Kestra    | latest version from `api.kestra.io/v1/versions/latest` | official single source of truth for the version (fallback `2.0.0`)                                                                                                                                                               |
+| Launcher  | `kestra-<version>` from official GitHub releases       | public, checksum-verified (vs. the signed `api/v1/versions/download` redirect); it's a shebang-less batch/sh polyglot, so the unit runs it via `/bin/sh` (running it via `execve` directly gives `Exec format error` / 203-EXEC) |
+| JVM       | `openjdk-25-jre-headless`                              | the 2.x launcher passes `--sun-misc-unsafe-memory-access=allow`, which only JDK ≥23 accepts                                                                                                                                      |
+| DB        | embedded H2 (`server local`)                           | zero-config standalone; acceptable for a single-node LXC                                                                                                                                                                         |
+| Service   | `kestra.service` (systemd, user `kestra`)              | auto-start, restart-on-failure, no Docker                                                                                                                                                                                        |
 
 Data, logs, and the launcher live in `/opt/kestra` (same location as the
 `kestra` user's home). Defaults: 2 vCPU, 4096 MB RAM, 16 GB disk.
