@@ -22,12 +22,6 @@ against the official `checksums_sha256.txt`).
 var_os='debian' bash -c "$(curl -fsSL https://raw.githubusercontent.com/danielhanaj/kestra_proxmox/refs/heads/main/kestra.sh)"
 ```
 
-or, once hosted anywhere you like (gist, plain web server, repo):
-
-```sh
-bash -c "$(wget -qLO - https://example.com/kestra.sh)"
-```
-
 Choose Default or Advanced, wait for the build, then open
 `http://<lxc-ip>:8080` — the Kestra editor starts empty; create your first
 workflow in the UI.
